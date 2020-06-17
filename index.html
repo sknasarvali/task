@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Google News Feed</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<link rel="stylesheet" type]="text/css" href="styles.css"/>	
+	
+	 <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> 
+		
+</head>
+
+<body>
+
+<marquee><h1>Google News Latest Updates</h1></marquee>
+
+<script>
+
+	const RSS_URL = `https://news.google.com/rss?cf=all&hl=en-IN&pz=1&gl=IN&ceid=IN:en`;
+	
+  	fetch(RSS_URL)
+  				.then(response => response.text())
+  				.then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+  				.then(data => {
+			    console.log(data);
+			    const items = data.querySelectorAll("item");
+			    let html = ``;
+			    items.forEach(el => {
+			      html += `
+			      			<div class="container col-md-6">
+					        	<div class="card">
+					        		<div class="card-body bg-">
+						        		<b><p class="card-title bg-danger"> ${el.querySelector("title").innerHTML}</p></b>
+						        		<p class="card-text bg-info"> ${el.querySelector("description").innerHTML}</p>
+						        		<p class="card-text bg-success"> ${el.querySelector("source").innerHTML}</p>
+					          			<p><a href="${el.querySelector("link").innerHTML}" class="card-link" target="_blank" rel="noopener">${el.querySelector("pubDate").innerHTML}</a>
+					             		</p>
+					         		</div>
+					        	</div>
+					        </div> 
+					        
+					           
+					      `;
+					    });
+					    document.body.insertAdjacentHTML("beforeend", html);
+					  });
+</script>
+
+</body>
+</html>
